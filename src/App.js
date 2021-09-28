@@ -25,7 +25,7 @@ function App() {
       <Menu />
       <Switch>
         <Route path="/login">
-          <LoginPage setActiveUser={setActiveUser} />
+          <LoginPage setActiveUser={setActiveUser} activeUser={activeUser} />
         </Route>
         <Route path="/search">
           <SearchPage
