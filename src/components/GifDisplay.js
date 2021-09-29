@@ -25,6 +25,3 @@ export default function GifDisplay({
     </div>
   );
 }
-// {
-//   favorites.some((fave) => fave.id === val.id);
-// }

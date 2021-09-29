@@ -1,5 +1,25 @@
 import React from "react";
+import GifDisplay from "./GifDisplay";
+import SearchPage from "./SearchPage";
 
-export default function FavoritesPage(favorites, deleteFavorite) {
-  return <div>Favorites Page</div>;
+export default function FavoritesPage({
+  activeUser,
+  favorites,
+  deleteFavorite,
+}) {
+  return (
+    <div>
+      <h2>Favorites for {activeUser}</h2>
+      {favorites.map((val) => (
+        <GifDisplay
+          isFavorite={true}
+          key={val.id}
+          id={val.id}
+          title={val.title}
+          deleteFavorite={deleteFavorite}
+          url={val.url}
+        />
+      ))}
+    </div>
+  );
 }

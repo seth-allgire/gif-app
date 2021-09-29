@@ -9,7 +9,6 @@ export default function SearchPage({
   deleteFavorite,
 }) {
   const [search, setSearch] = useState("");
-  //   const [responseData, setResponseData] = useState
   const [gifs, setGifs] = useState([]);
 
   async function callAPI() {
@@ -18,15 +17,12 @@ export default function SearchPage({
 
       const response = await fetch(url);
       const { data } = await response.json();
-      setGifs(
-        () =>
-          data.map((gif) => ({
-            // isFavorite: false,
-            id: gif.id,
-            title: gif.title,
-            url: gif.images.original.url,
-          }))
-        // console.log(data);
+      setGifs(() =>
+        data.map((gif) => ({
+          id: gif.id,
+          title: gif.title,
+          url: gif.images.original.url,
+        }))
       );
     } catch (e) {
       console.log(e);
@@ -47,15 +43,17 @@ export default function SearchPage({
       <button onClick={callAPI}>Search</button>
       <div>
         {gifs.map((val) => (
-          <GifDisplay
-            isFavorite={favorites.some((fave) => fave.id === val.id)}
-            key={val.id}
-            id={val.id}
-            title={val.title}
-            deleteFavorite={deleteFavorite}
-            addFavorite={addFavorite}
-            url={val.url}
-          />
+          <>
+            <GifDisplay
+              isFavorite={favorites.some((fave) => fave.id === val.id)}
+              key={val.id}
+              id={val.id}
+              title={val.title}
+              deleteFavorite={deleteFavorite}
+              addFavorite={addFavorite}
+              url={val.url}
+            />
+          </>
         ))}
       </div>
     </>
