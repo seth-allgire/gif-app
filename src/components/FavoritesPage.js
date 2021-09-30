@@ -1,6 +1,5 @@
 import React from "react";
 import GifDisplay from "./GifDisplay";
-import SearchPage from "./SearchPage";
 
 export default function FavoritesPage({
   activeUser,

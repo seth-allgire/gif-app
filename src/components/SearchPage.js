@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react/cjs/react.development";
+import useFetch from "../hooks/useFetch";
 import GifDisplay from "./GifDisplay";
 
 export default function SearchPage({
@@ -8,52 +9,39 @@ export default function SearchPage({
   addFavorite,
   deleteFavorite,
 }) {
+  const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
-  const [gifs, setGifs] = useState([]);
-
-  async function callAPI() {
-    try {
-      const url = `https://api.giphy.com/v1/gifs/search?api_key=DCKpHj8LvPQEaZfIE6nxTBmumXwxJcEc&q=${search}&limit=25&offset=0&rating=pg&lang=en`;
-
-      const response = await fetch(url);
-      const { data } = await response.json();
-      setGifs(() =>
-        data.map((gif) => ({
-          id: gif.id,
-          title: gif.title,
-          url: gif.images.original.url,
-        }))
-      );
-    } catch (e) {
-      console.log(e);
-    }
-  }
+  const { data, error, loading } = useFetch(search);
 
   return (
     <>
       <div>
-        <label htmlFor="search">Find a GIF:</label>
+        <label htmlFor="search">Search:</label>
         <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          onKeyPress={(e) => {
+            if (e.code === "Enter") {
+              setSearch(searchInput);
+            }
+          }}
           id="search"
-          placeholder=""
+          name="search"
+          placeholder="Search for a GIF"
         ></input>
       </div>
-      <button onClick={callAPI}>Search</button>
+      <button onClick={() => setSearch(searchInput)}>Search</button>
       <div>
-        {gifs.map((val) => (
-          <>
-            <GifDisplay
-              isFavorite={favorites.some((fave) => fave.id === val.id)}
-              key={val.id}
-              id={val.id}
-              title={val.title}
-              deleteFavorite={deleteFavorite}
-              addFavorite={addFavorite}
-              url={val.url}
-            />
-          </>
+        {data.map((val) => (
+          <GifDisplay
+            isFavorite={favorites.some((fave) => fave.id === val.id)}
+            key={val.id}
+            id={val.id}
+            title={val.title}
+            deleteFavorite={deleteFavorite}
+            addFavorite={addFavorite}
+            url={val.url}
+          />
         ))}
       </div>
     </>
