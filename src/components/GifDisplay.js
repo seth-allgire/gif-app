@@ -11,7 +11,7 @@ export default function GifDisplay({
   return (
     <div>
       <h3>
-        {id} {title}
+        {id} - {title}
       </h3>
       <img src={url} alt="" />
       {!isFavorite && (

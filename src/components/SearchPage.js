@@ -32,17 +32,20 @@ export default function SearchPage({
       </div>
       <button onClick={() => setSearch(searchInput)}>Search</button>
       <div>
-        {data.map((val) => (
-          <GifDisplay
-            isFavorite={favorites.some((fave) => fave.id === val.id)}
-            key={val.id}
-            id={val.id}
-            title={val.title}
-            deleteFavorite={deleteFavorite}
-            addFavorite={addFavorite}
-            url={val.url}
-          />
-        ))}
+        {loading && <div>LOADING</div>}
+        {error && !loading && <div>{error}</div>}
+        {data &&
+          data.map((val) => (
+            <GifDisplay
+              isFavorite={favorites.some((fave) => fave.id === val.id)}
+              key={val.id}
+              id={val.id}
+              title={val.title}
+              deleteFavorite={deleteFavorite}
+              addFavorite={addFavorite}
+              url={val.url}
+            />
+          ))}
       </div>
     </>
   );

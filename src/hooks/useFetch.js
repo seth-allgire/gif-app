@@ -3,7 +3,7 @@ import { useState, useEffect } from "react/cjs/react.development";
 export default function useFetch(search) {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const url = `https://api.giphy.com/v1/gifs/search?api_key=DCKpHj8LvPQEaZfIE6nxTBmumXwxJcEc&q=${search}&limit=25&offset=0&rating=pg&lang=en`;

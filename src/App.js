@@ -10,6 +10,7 @@ import {
 import SearchPage from "./components/SearchPage";
 import FavoritesPage from "./components/FavoritesPage";
 import LoginPage from "./components/LoginPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   const [favorites, setFavorites] = useState([]);
@@ -23,25 +24,30 @@ function App() {
   return (
     <Router>
       <Menu />
+      <button onClick={() => setActiveUser("")}>Logout</button>
       <Switch>
-        <Route path="/login">
+        <ProtectedRoute activeUser={activeUser} shielded={false} path="/login">
           <LoginPage setActiveUser={setActiveUser} activeUser={activeUser} />
-        </Route>
-        <Route path="/search">
+        </ProtectedRoute>
+        <ProtectedRoute activeUser={activeUser} shielded={true} path="/search">
           <SearchPage
             activeUser={activeUser}
             favorites={favorites}
             addFavorite={addFavorite}
             deleteFavorite={deleteFavorite}
           />
-        </Route>
-        <Route path="/favorites">
+        </ProtectedRoute>
+        <ProtectedRoute
+          activeUser={activeUser}
+          shielded={true}
+          path="/favorites"
+        >
           <FavoritesPage
             activeUser={activeUser}
             favorites={favorites}
             deleteFavorite={deleteFavorite}
           />
-        </Route>
+        </ProtectedRoute>
         <Route path="*">
           <Redirect to="/login"></Redirect>
         </Route>
