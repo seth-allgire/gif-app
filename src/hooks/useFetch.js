@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react/cjs/react.development";
 
 export default function useFetch(search) {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 

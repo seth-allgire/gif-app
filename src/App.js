@@ -28,6 +28,7 @@ function App() {
             dispatch={dispatch}
             user={state.user}
             favorites={state.favorites}
+            search={state.search}
           />
         </ProtectedRoute>
         <ProtectedRoute user={state.user} shielded={true} path="/favorites">
@@ -36,14 +37,6 @@ function App() {
             user={state.user}
             favorites={state.favorites}
           />
-        </ProtectedRoute>
-        <ProtectedRoute user={state.user} shielded={true} path="/login">
-          {/* <Logout
-          // dispatch={dispatch}
-          // user={(state.user = "")}
-          // favorites={(state.favorites = [])}
-          // search={(state.search = "")}
-          /> */}
         </ProtectedRoute>
         <Route path="*">
           <Redirect to="/login"></Redirect>

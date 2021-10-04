@@ -1,28 +1,33 @@
-import React from "react";
-import { useState } from "react/cjs/react.development";
+import React, { useRef } from "react";
+import { useEffect, useState } from "react/cjs/react.development";
 import useFetch from "../hooks/useFetch";
+import {
+  ADD_FAVORITE,
+  DELETE_FAVORITE,
+  SET_SEARCH,
+} from "../shared/rootReducer";
 import GifDisplay from "./GifDisplay";
 
-export default function SearchPage({
-  activeUser,
-  favorites,
-  addFavorite,
-  deleteFavorite,
-}) {
-  const [searchInput, setSearchInput] = useState("");
-  const [search, setSearch] = useState("");
-  const { data, error, loading } = useFetch(search);
+export default function SearchPage({ user, search, favorites, dispatch }) {
+  const [query, setQuery] = useState("");
+  const queryRef = useRef(null);
+  const { data, error, loading } = useFetch(query);
+
+  useEffect(() => {
+    if (data) {
+      dispatch({ type: SET_SEARCH, search: data });
+    }
+  }, [data]);
 
   return (
     <>
       <div>
         <label htmlFor="search">Search:</label>
         <input
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
+          ref={queryRef}
           onKeyPress={(e) => {
             if (e.code === "Enter") {
-              setSearch(searchInput);
+              setQuery(queryRef.current.value);
             }
           }}
           id="search"
@@ -30,19 +35,20 @@ export default function SearchPage({
           placeholder="Search for a GIF"
         ></input>
       </div>
-      <button onClick={() => setSearch(searchInput)}>Search</button>
+      <button onClick={() => setQuery(queryRef.current.value)}>Search</button>
       <div>
         {loading && <div>LOADING</div>}
         {error && !loading && <div>{error}</div>}
-        {data &&
-          data.map((val) => (
+        {search &&
+          !loading &&
+          search.map((val) => (
             <GifDisplay
               isFavorite={favorites.some((fave) => fave.id === val.id)}
               key={val.id}
               id={val.id}
               title={val.title}
-              deleteFavorite={deleteFavorite}
-              addFavorite={addFavorite}
+              deleteFavorite={(id) => dispatch({ type: DELETE_FAVORITE, id })}
+              addFavorite={(gif) => dispatch({ type: ADD_FAVORITE, gif })}
               url={val.url}
             />
           ))}
