@@ -1,7 +1,8 @@
 import React from "react";
 import { useState } from "react/cjs/react.development";
+import { SET_USER } from "../shared/rootReducer";
 
-export default function LoginPage({ setActiveUser }) {
+export default function LoginPage({ dispatch }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
@@ -42,7 +43,7 @@ export default function LoginPage({ setActiveUser }) {
             setError(true);
             return;
           }
-          setActiveUser(username);
+          dispatch({ type: SET_USER, user: username });
         }}
       >
         Login
