@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useMemo, useRef } from "react";
 import { useEffect, useState } from "react/cjs/react.development";
 import useFetch from "../hooks/useFetch";
 import {
@@ -11,6 +11,13 @@ import GifDisplay from "./GifDisplay";
 export default function SearchPage({ user, search, favorites, dispatch }) {
   const [query, setQuery] = useState("");
   const queryRef = useRef(null);
+  const numBearFaves = useMemo(
+    () =>
+      favorites.filter((val) => val.title.toLowerCase().includes("bear"))
+        .length,
+    [favorites]
+  );
+
   const { data, error, loading } = useFetch(query);
 
   useEffect(() => {
@@ -22,6 +29,7 @@ export default function SearchPage({ user, search, favorites, dispatch }) {
   return (
     <>
       <div>
+        <h4>You have {numBearFaves} containing the word bear in the title.</h4>
         <label htmlFor="search">Search:</label>
         <input
           ref={queryRef}
