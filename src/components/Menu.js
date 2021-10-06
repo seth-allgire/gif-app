@@ -1,18 +1,29 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
+import { GiphyContext } from "../shared/GiphyContext";
 
-export default function Menu(props) {
+export default function Menu() {
+  const { user, clearState } = useContext(GiphyContext);
   return (
     <nav className="menu">
-      <NavLink className="link" to="/login" activeClassName="active">
-        Login
-      </NavLink>
-      <NavLink className="link" to="/search" activeClassName="active">
-        Search
-      </NavLink>
-      <NavLink className="link" to="/favorites" activeClassName="active">
-        Favorites
-      </NavLink>
+      {!user && (
+        <NavLink className="link" to="/login" activeClassName="active">
+          Login
+        </NavLink>
+      )}
+      {user && (
+        <>
+          <NavLink className="link" to="/search" activeClassName="active">
+            Search
+          </NavLink>
+          <NavLink className="link" to="/favorites" activeClassName="active">
+            Favorites
+          </NavLink>
+          <button classname="link" onClick={clearState}>
+            Logout
+          </button>
+        </>
+      )}
     </nav>
   );
 }

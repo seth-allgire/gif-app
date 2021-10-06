@@ -1,28 +1,29 @@
-import React from "react";
-import { useState } from "react/cjs/react.development";
+import React, { useContext, useEffect, useState } from "react";
 import useFetch from "../hooks/useFetch";
+import { GiphyContext } from "../shared/GiphyContext";
 import GifDisplay from "./GifDisplay";
 
-export default function SearchPage({
-  activeUser,
-  favorites,
-  addFavorite,
-  deleteFavorite,
-}) {
-  const [searchInput, setSearchInput] = useState("");
-  const [search, setSearch] = useState("");
-  const { data, error, loading } = useFetch(search);
-
+export default function SearchPage() {
+  const [queryInput, setQueryInput] = useState("");
+  const [query, setQuery] = useState("");
+  const { data, error, loading } = useFetch(query);
+  const { user, favorites, addFavorite, deleteFavorite, search, setSearch } =
+    useContext(GiphyContext);
+  useEffect(() => {
+    if (data) {
+      setSearch(data);
+    }
+  }, [data, setSearch]);
   return (
     <>
       <div>
         <label htmlFor="search">Search:</label>
         <input
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
+          value={queryInput}
+          onChange={(e) => setQueryInput(e.target.value)}
           onKeyPress={(e) => {
             if (e.code === "Enter") {
-              setSearch(searchInput);
+              setQuery(queryInput);
             }
           }}
           id="search"
@@ -30,12 +31,13 @@ export default function SearchPage({
           placeholder="Search for a GIF"
         ></input>
       </div>
-      <button onClick={() => setSearch(searchInput)}>Search</button>
+      <button onClick={() => setQuery(queryInput)}>Search</button>
       <div>
         {loading && <div>LOADING</div>}
         {error && !loading && <div>{error}</div>}
-        {data &&
-          data.map((val) => (
+        {search &&
+          !loading &&
+          search.map((val) => (
             <GifDisplay
               isFavorite={favorites.some((fave) => fave.id === val.id)}
               key={val.id}

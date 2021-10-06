@@ -1,10 +1,11 @@
-import React from "react";
-import { useState } from "react/cjs/react.development";
+import React, { useContext, useState } from "react";
+import { GiphyContext } from "../shared/GiphyContext";
 
-export default function LoginPage({ setActiveUser }) {
+export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
+  const { setUser } = useContext(GiphyContext);
   return (
     <div>
       <div>
@@ -22,7 +23,7 @@ export default function LoginPage({ setActiveUser }) {
           "Username must be at least 4 characters"}
       </div>
       <div>
-        <label htmlFor="password">Username:</label>
+        <label htmlFor="password">Password:</label>
         <input
           type="password"
           value={password}
@@ -32,8 +33,8 @@ export default function LoginPage({ setActiveUser }) {
         ></input>
         <div>
           {error &&
-            username.length < 4 &&
-            "Username must be at least 4 characters"}
+            password.length < 4 &&
+            "Password must be at least 4 characters"}
         </div>
       </div>
       <button
@@ -42,7 +43,7 @@ export default function LoginPage({ setActiveUser }) {
             setError(true);
             return;
           }
-          setActiveUser(username);
+          setUser(username);
         }}
       >
         Login

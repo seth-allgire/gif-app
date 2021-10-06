@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useContext, useMemo } from "react";
 import { Redirect, Route } from "react-router-dom";
-export default function ProtectedRoute({
-  activeUser,
-  children,
-  path,
-  shielded,
-}) {
-  const redirectTo = shielded ? "/login" : "/search";
+import { GiphyContext } from "../shared/GiphyContext";
 
-  if ((activeUser && shielded) || (!activeUser && !shielded)) {
+export default function ProtectedRoute({ children, path, shielded }) {
+  const { user } = useContext(GiphyContext);
+  const redirectTo = useMemo(
+    () => (shielded ? "/login" : "/search"),
+    [shielded]
+  );
+
+  if ((user && shielded) || (!user && !shielded)) {
     return <Route path={path}>{children}</Route>;
   } else {
     return (

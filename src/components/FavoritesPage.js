@@ -1,14 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
+import { GiphyContext } from "../shared/GiphyContext";
 import GifDisplay from "./GifDisplay";
 
-export default function FavoritesPage({
-  activeUser,
-  favorites,
-  deleteFavorite,
-}) {
+export default function FavoritesPage() {
+  const { user, favorites, deleteFavorite } = useContext(GiphyContext);
   return (
     <div>
-      <h2>Favorites for {activeUser}</h2>
+      <h2>Favorites for {user}</h2>
       {favorites.map((val) => (
         <GifDisplay
           isFavorite={true}
