@@ -19,7 +19,7 @@ export default function Menu() {
           <NavLink className="link" to="/favorites" activeClassName="active">
             Favorites
           </NavLink>
-          <button classname="link" onClick={clearState}>
+          <button className="link" onClick={clearState}>
             Logout
           </button>
         </>
