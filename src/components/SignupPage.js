@@ -2,19 +2,14 @@ import React, { useContext, useEffect, useState } from "react";
 import { GiphyContext } from "../shared/GiphyContext";
 import useAxios from "../hooks/useAxios";
 
-export default function LoginPage() {
+export default function SignupPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
-  const { setUser } = useContext(GiphyContext);
+  //   const { setUser } = useContext(GiphyContext);
   const [userObj, setUserObj] = useState(null);
-  const { json } = useAxios("/api/users/login", "post", userObj);
+  const { json } = useAxios("/api/users/signup", "post", userObj);
 
-  useEffect(() => {
-    if (json && json.success) {
-      setUser(json.data);
-    }
-  }, [setUserObj, setUser, json]);
   return (
     <div>
       <div>
@@ -52,12 +47,14 @@ export default function LoginPage() {
             setError(true);
             return;
           }
+          debugger;
           setUserObj({ username, password });
         }}
       >
-        Login
+        Signup
       </button>
       <div>{json && json.error}</div>
+      <div>{json && json.data}</div>
     </div>
   );
 }

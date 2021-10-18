@@ -7,15 +7,16 @@ export default function GifDisplay({
   isFavorite,
   addFavorite,
   deleteFavorite,
+  gif_id,
 }) {
   return (
     <div>
       <h3>
-        {id} - {title}
+        {gif_id} - {title}
       </h3>
-      <img src={url} alt="" />
+      <img src={url} alt="gif" />
       {!isFavorite && (
-        <button onClick={() => addFavorite({ id, title, url })}>
+        <button onClick={() => addFavorite({ gif_id, title, url })}>
           Add Favorite
         </button>
       )}

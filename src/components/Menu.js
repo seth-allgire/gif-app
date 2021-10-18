@@ -6,12 +6,17 @@ export default function Menu() {
   const { user, clearState } = useContext(GiphyContext);
   return (
     <nav className="menu">
-      {!user && (
-        <NavLink className="link" to="/login" activeClassName="active">
-          Login
-        </NavLink>
+      {!user.username && (
+        <>
+          <NavLink className="link" to="/signup" activeClassName="active">
+            Signup
+          </NavLink>
+          <NavLink className="link" to="/login" activeClassName="active">
+            Login
+          </NavLink>
+        </>
       )}
-      {user && (
+      {user.username && (
         <>
           <NavLink className="link" to="/search" activeClassName="active">
             Search

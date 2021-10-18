@@ -1,19 +1,28 @@
 import React, { useContext, useEffect, useState } from "react";
-import useFetch from "../hooks/useFetch";
+import useAxios from "../hooks/useAxios";
 import { GiphyContext } from "../shared/GiphyContext";
 import GifDisplay from "./GifDisplay";
 
+const gifURL = `https://api.giphy.com/v1/gifs/search?api_key=DCKpHj8LvPQEaZfIE6nxTBmumXwxJcEc&limit=25&offset=0&rating=pg&lang=en&q=`;
+
 export default function SearchPage() {
+  const { favorites, addFavorite, deleteFavorite, search, setSearch } =
+    useContext(GiphyContext);
   const [queryInput, setQueryInput] = useState("");
   const [query, setQuery] = useState("");
-  const { data, error, loading } = useFetch(query);
-  const { user, favorites, addFavorite, deleteFavorite, search, setSearch } =
-    useContext(GiphyContext);
+  const { json, error, loading } = useAxios(query, "get");
+
   useEffect(() => {
-    if (data) {
-      setSearch(data);
+    if (json) {
+      setSearch(() =>
+        json.data.map((gif) => ({
+          gif_id: gif.id,
+          title: gif.title,
+          url: gif.images.original.url,
+        }))
+      );
     }
-  }, [data, setSearch]);
+  }, [json, setSearch]);
   return (
     <>
       <div>
@@ -23,7 +32,7 @@ export default function SearchPage() {
           onChange={(e) => setQueryInput(e.target.value)}
           onKeyPress={(e) => {
             if (e.code === "Enter") {
-              setQuery(queryInput);
+              setQuery(gifURL + queryInput);
             }
           }}
           id="search"
@@ -31,7 +40,7 @@ export default function SearchPage() {
           placeholder="Search for a GIF"
         ></input>
       </div>
-      <button onClick={() => setQuery(queryInput)}>Search</button>
+      <button onClick={() => setQuery(gifURL + queryInput)}>Search</button>
       <div>
         {loading && <div>LOADING</div>}
         {error && !loading && <div>{error}</div>}
@@ -39,9 +48,10 @@ export default function SearchPage() {
           !loading &&
           search.map((val) => (
             <GifDisplay
-              isFavorite={favorites.some((fave) => fave.id === val.id)}
-              key={val.id}
+              isFavorite={favorites.some((fave) => fave.gif_id === val.gif_id)}
+              key={val.gif_id}
               id={val.id}
+              gif_id={val.gif_id}
               title={val.title}
               deleteFavorite={deleteFavorite}
               addFavorite={addFavorite}

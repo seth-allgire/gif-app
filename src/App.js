@@ -1,6 +1,6 @@
 import "./App.css";
-import Menu from "./components/Menu";
 import React from "react";
+import Menu from "./components/Menu";
 import {
   Route,
   BrowserRouter as Router,
@@ -11,6 +11,7 @@ import SearchPage from "./components/SearchPage";
 import FavoritesPage from "./components/FavoritesPage";
 import LoginPage from "./components/LoginPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import SignupPage from "./components/SignupPage.js";
 
 function App() {
   return (
@@ -18,6 +19,9 @@ function App() {
       <Menu />
 
       <Switch>
+        <ProtectedRoute shielded={false} path="/signup">
+          <SignupPage />
+        </ProtectedRoute>
         <ProtectedRoute shielded={false} path="/login">
           <LoginPage />
         </ProtectedRoute>

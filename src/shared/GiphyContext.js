@@ -1,29 +1,51 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import axios from "axios";
 
 export const GiphyContext = React.createContext(null);
 
 export function GiphyProvider(props) {
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState({});
   const [search, setSearch] = useState([]);
   const [favorites, setFavorites] = useState([]);
 
+  useEffect(() => {
+    async function getFaves() {
+      const { data } = await axios.get(`/api/favorites/user/${user.id}`);
+      if (!data.success) return;
+      setFavorites(data.data);
+    }
+    if (user.id) {
+      getFaves();
+    }
+  }, [user]);
+
   const addFavorite = useCallback(
-    (gif) => {
-      setFavorites((curr) => [...curr, gif]);
+    async (gif) => {
+      debugger;
+      const { data } = await axios.post("/api/favorites/add", {
+        ...gif,
+        user_id: user.id,
+      });
+      setFavorites((curr) => {
+        return [...curr, data.data];
+      });
     },
-    [setFavorites]
+    [setFavorites, user]
   );
 
   const deleteFavorite = useCallback(
-    (id) => {
-      setFavorites((curr) => curr.filter((val) => id !== val.id));
+    async (id) => {
+      const { data } = await axios.delete(`/api/favorites/delete/${id}`);
+      setFavorites((curr) => {
+        return curr.filter((val) => val.id !== data.data);
+      });
     },
     [setFavorites]
   );
 
   const clearState = useCallback(() => {
-    setUser("");
-    setSearch("");
+    setUser({});
+    setSearch([]);
     setFavorites([]);
   }, [setFavorites, setSearch, setUser]);
 
